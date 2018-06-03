@@ -8,6 +8,18 @@
 前端：EasyUI，Echarts <br> 
 前后端没有分离，前端以jsp页面展示
 
+# 项目结构
+``` lua
+mulanbay
+├── mulanbay-business -- 通用业务类
+├── mulanbay-common -- 公共模块
+├── mulanbay-persistentn -- 持久层hibernate的封装
+├── mulanbay-pms -- 木兰湾管理系统项目
+├── mulanbay-schedule -- 调度模块封装
+├── mulanbay-web -- 基于SpringMVC的一些封装
+
+```
+
 # 部署所需软件
 Mysql 5.7+,JDK 1.8+,Redis 4.0+,Tomcat 8+.
 
