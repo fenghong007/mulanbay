@@ -13,7 +13,7 @@
 mulanbay
 ├── mulanbay-business -- 通用业务类
 ├── mulanbay-common -- 公共模块
-├── mulanbay-persistentn -- 持久层hibernate的封装
+├── mulanbay-persistent -- 持久层hibernate的封装
 ├── mulanbay-pms -- 木兰湾管理系统项目
 ├── mulanbay-schedule -- 调度模块封装
 ├── mulanbay-web -- 基于SpringMVC的一些封装
