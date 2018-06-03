@@ -1,0 +1,51 @@
+package cn.mulanbay.pms.persistent.bean;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+/**
+ * Created by fenghong on 2017/1/31.
+ * 口琴练习统计
+ */
+public class MusicPracticeCompareStat{
+
+    private Object xValue;
+
+    private Object yValue;
+
+    public Object getxValue() {
+        return xValue;
+    }
+
+    public void setxValue(Object xValue) {
+        this.xValue = xValue;
+    }
+
+    public Object getyValue() {
+        return yValue;
+    }
+
+    public void setyValue(Object yValue) {
+        this.yValue = yValue;
+    }
+
+    public double getxDoubleValue(){
+        if(xValue instanceof BigDecimal){
+            return ((BigDecimal) xValue).doubleValue();
+        }
+        if(xValue instanceof BigInteger){
+            return ((BigInteger) xValue).doubleValue();
+        }
+        return Double.valueOf(xValue.toString());
+    }
+
+    public double getyDoubleValue(){
+        if(yValue instanceof BigDecimal){
+            return ((BigDecimal) yValue).doubleValue();
+        }
+        if(yValue instanceof BigInteger){
+            return ((BigInteger) yValue).doubleValue();
+        }
+        return Double.valueOf(yValue.toString());
+    }
+}

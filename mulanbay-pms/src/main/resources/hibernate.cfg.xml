@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>  
+<!DOCTYPE hibernate-configuration PUBLIC  
+         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"  
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+        <property name="connection.url">jdbc:mysql://localhost:3306/pms</property>
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <mapping class="cn.mulanbay.pms.persistent.domain.NotifyConfig"/>
+        <!-- 缓存类配置,不写配置文件那么在实体类中需要打@Cache标签 -->
+		<class-cache class="cn.mulanbay.pms.persistent.domain.BuyType" usage="read-write"/>
+		<class-cache class="cn.mulanbay.pms.persistent.domain.GoodsType" usage="read-write"/>
+	</session-factory>
+</hibernate-configuration>  

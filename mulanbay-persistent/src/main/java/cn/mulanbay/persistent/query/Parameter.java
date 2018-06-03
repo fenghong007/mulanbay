@@ -1,0 +1,186 @@
+package cn.mulanbay.persistent.query;
+
+
+import cn.mulanbay.common.exception.ErrorCode;
+import cn.mulanbay.common.exception.PersistentException;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * 通用查询的每个字段查询参数定义
+ *
+ * @author fenghong
+ * @create 2018-01-20 21:44
+ */
+public class Parameter {
+
+	public final static Object NULL_VALUE = new Object();
+
+	/**
+	 * 如果是REFER类型，表示运算符是另外一个域来决定，且其类型为Operator
+	 */
+	public enum Operator {
+		EQ("="), NE("!="), LIKE("like"), GT(">"), LT("<"), GTE(">="), LTE("<="),
+		IN("in"), NOTIN("not in"), SQL(""),REFER("");
+
+		private String symbol;
+
+		public String getSymbol() {
+			return symbol;
+		}
+
+		public void setSymbol(String symbol) {
+			this.symbol = symbol;
+		}
+
+		Operator(String symbol) {
+			this.symbol = symbol;
+		}
+	}
+
+	private String fieldName;
+
+	private Operator condition;
+
+	private Object value;
+
+	private CrossType crossType;
+
+	//是否计算过
+	private boolean isCaled;
+
+	public String getFieldName() {
+		return fieldName;
+	}
+
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
+	}
+
+	public Operator getCondition() {
+		return condition;
+	}
+
+	public void setCondition(Operator condition) {
+		this.condition = condition;
+	}
+
+	public Object getValue() {
+		return value;
+	}
+
+	public CrossType getCrossType() {
+		return crossType;
+	}
+
+	public void setCrossType(CrossType crossType) {
+		this.crossType = crossType;
+	}
+
+	public Parameter(String fieldName, Operator condition) {
+		super();
+		this.fieldName = fieldName;
+		this.condition = condition;
+	}
+
+	public Parameter(String fieldName, Operator condition, Object value) {
+		super();
+		this.fieldName = fieldName;
+		this.condition = condition;
+		this.value = value;
+	}
+
+	public void setValue(Object value) {
+		this.value = value;
+	}
+
+	/**
+	 * 获取查询参数，不过该方法做了很多逻辑操作，不能调用两次以上
+	 * @return
+	 */
+	public String getParameterString() {
+		if(isCaled){
+			throw new PersistentException(ErrorCode.PARAMETER_DUPLIDATE_CAL);
+		}
+		isCaled =true;
+		if(condition==Operator.SQL){
+			//如果是SQL类型则直接返回，目前没做变量绑定支持
+			String s = value.toString();
+			value=NULL_VALUE;
+			return " and "+s;
+		}else if(crossType==CrossType.NULL){
+			//普通类型，不需要多个域以前查询
+			return " and " + fieldName + " "+this.getOperateSymbol();
+		}else{
+			//跨多个域
+			String[] ss = fieldName.split(",");
+			int n =ss.length;
+			if(n==1){
+				//还是普通类型
+				return " and " + fieldName + this.getOperateSymbol();
+			}
+			String os = this.getOperateSymbol();
+			List newValues = new ArrayList();
+			StringBuffer sb = new StringBuffer();
+			sb.append(" and (");
+			for(int i=0;i<n;i++){
+				sb.append(ss[i] +" "+ os);
+				if(i<n-1){
+					sb.append(" "+crossType.getSymbol()+" ");
+				}
+				if(value!=null){
+					if(value instanceof List || value instanceof Set ){
+						Collection vv = (Collection) value;
+						newValues.addAll(vv);
+					}else{
+						newValues.add(value);
+					}
+				}
+			}
+			sb.append(")");
+			//重新设置绑定变量
+			this.value =newValues;
+			return sb.toString();
+		}
+	}
+
+	/**
+	 * sql的操作运算符
+	 * @return
+	 */
+	private String getOperateSymbol(){
+		if(condition==Operator.IN||condition==Operator.NOTIN){
+			if(value instanceof String){
+				String s = condition.getSymbol()+" (" + value.toString() + ") ";
+				value = NULL_VALUE;
+				return s;
+			}else if(value instanceof List || value instanceof Set){
+				// 集合类型，value不需要重新设置，由getParameterString()方法重新设置
+				Collection newValues = (Collection) value;
+				int n = newValues.size();
+				StringBuffer sb = new StringBuffer();
+				sb.append(condition.getSymbol()+" (" );
+				for(int i=0;i<n;i++){
+					sb.append("?");
+					if(i<n-1){
+						sb.append(",");
+					}
+					//newValues.add(value);
+				}
+				sb.append(") ");
+				//this.value=newValues;
+				return sb.toString();
+			}else{
+				throw new PersistentException("无法识别的IN 或者 NOTIN 绑定变量类型");
+			}
+		}else if(condition==Operator.LIKE){
+			value = "%"+value.toString()+"%";
+			return condition.getSymbol()+" ? ";
+		}else{
+			return condition.getSymbol()+" ? ";
+		}
+	}
+}
