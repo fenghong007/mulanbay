@@ -4,8 +4,8 @@
 # 项目介绍
 
 # 使用到的技术
-后端：Hibernate,Spring MVC,Spring,quartz
-前端：EasyUI，Echarts
+后端：Hibernate,Spring MVC,Spring,quartz \\
+前端：EasyUI，Echarts \\
 （前后没有分离，前端以jsp页面展示）
 
 # 部署所需软件：
