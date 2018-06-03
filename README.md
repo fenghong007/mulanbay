@@ -15,7 +15,7 @@ Mysql 5.7+,JDK 1.8+,Redis 4.0+,Tomcat 8+.
 step1：创建mysql数据库，执行子工程mulanbay-pms/src/docs下的两个sql文件进行初始化数据库<br> 
 step2：修改mulanbay-pms/src/main/resources/app.properties或者在该目录下新建app-local.properties文件（本地文件），
        修改数据库连接信息：db.url、db.username、db.password<br> 
-step2：利用maven打包整个功能，复制mulanbay-pms/target目录下的mulanbay-pms-1.0.war到tomcat/webapps目录,重新命名为ROOT.war（静态资源路径采用        了绝对路径）
+step3：利用maven打包整个功能，复制mulanbay-pms/target目录下的mulanbay-pms-1.0.war到tomcat/webapps目录,重新命名为ROOT.war（静态资源路径采用        了绝对路径）
 
 # 演示地址
 http://47.98.237.160/  账号密码：test / 123456 
