@@ -4,7 +4,7 @@
 # 项目介绍
 
 # 使用到的技术
-后端：Hibernate,Spring MVC,Spring,quartz <br> 
+后端：Hibernate,Spring MVC,Spring,Quartz <br> 
 前端：EasyUI，Echarts <br> 
 前后端没有分离，前端以jsp页面展示
 
@@ -13,3 +13,8 @@ Mysql 5.7+,JDK 1.8+,Redis 4.0+,Tomcat 8+.
 
 # 演示地址
 http://47.98.237.160/  账号密码：test / 123456 
+
+# 项目截图
+
+首页
+http://chuantu.biz/t6/323/1528013585x-1404817581.png
